@@ -6,6 +6,8 @@
 #include <mpi.h>
 #include <string.h>
 
+#include "image_reader.c"
+
 void process(char *filename, char *output);
 
 int main(int argc, char **argv) {
@@ -35,7 +37,7 @@ int main(int argc, char **argv) {
 	//End error checking --------------------------------------------------
 
 	MPI_Init(&argc, &argv);      // initialize MPI environment
-    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_id);
 
 	if (!my_id)
