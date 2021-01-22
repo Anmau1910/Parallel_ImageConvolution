@@ -36,12 +36,12 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE);
 	}
 
-	if (strlen(argv[3]) > 1 || argv[3] - '0' > 8 || argv[3] - '0' < 1) {
+	if (strlen(argv[3]) > 1 || argv[3][0] - '0' > 8 || argv[3][0] - '0' < 1) {
 		fprintf(stderr, "Filtro no reconocido\n");
 		exit(EXIT_FAILURE);
 	}
 	//End error checking --------------------------------------------------
-	filt = argv[3] - '0';
+	filt = argv[3][0] - '0';
 
 	MPI_Init(NULL, NULL);      // initialize MPI environment
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
