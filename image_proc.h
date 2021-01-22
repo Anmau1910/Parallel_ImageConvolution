@@ -11,5 +11,5 @@
 extern float filters[9][3][3];
 enum filter { BLUR, BSOBEL, EMBOSS, IDENT, LSOBEL, OUTL, RSOBEL, SHARP, TSOBEL };
 
-void process(const char *filepath, const char *outfile);
+void process(const char *filepath, const char *outfile, int filt);
 

@@ -69,7 +69,7 @@ unsigned char apply(unsigned char *img, int w, int h, int i, float kern[3][3]) {
 	return kern_apply(img + i - w - 1, img + i - 1, img + i + w - 1, kern);
 }
 
-void process(const char *filepath, const char *outfile) {
+void process(const char *filepath, const char *outfile, int filt) {
 	int w, h, chans, i;
 	unsigned char *img, *out;
 
@@ -82,7 +82,7 @@ void process(const char *filepath, const char *outfile) {
 
 	#pragma omp parallel for
 	for(i = 0; i < w * h; i++) {
-		out[i] = apply(img, w, h, i, filters[OUTL]);
+		out[i] = apply(img, w, h, i, filters[filt]);
 	}
 
 	stbi_write_bmp(outfile, w, h, 1, out); 

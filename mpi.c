@@ -2,6 +2,7 @@
 
 int main(int argc, char **argv) {
 	DIR *in_dir, *out_dir;
+	int filt;
 
 	int world_size, tag = 99; // number of processes / tag
 	int my_id; // the id of the process
@@ -9,8 +10,18 @@ int main(int argc, char **argv) {
 	struct dirent *de;
 
 	//Error checking --------------------------------------------------
-	if (argc != 3) {
-		fprintf(stderr, "Usage %s input_dir output_dir\n", argv[0]);
+	if (argc != 4) {
+		fprintf(stderr, "Usage %s input_dir output_dir filter\n", argv[0]);
+		fprintf(stderr, "Filters:\n");
+		fprintf(stderr, "\t0: blur\n");
+		fprintf(stderr, "\t1: bottom sobel\n");
+		fprintf(stderr, "\t2: emboss\n");
+		fprintf(stderr, "\t3: identity\n");
+		fprintf(stderr, "\t4: left sobel\n");
+		fprintf(stderr, "\t5: outline\n");
+		fprintf(stderr, "\t6: right sobel\n");
+		fprintf(stderr, "\t7: sharpen\n");
+		fprintf(stderr, "\t8: top sobel\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -24,7 +35,13 @@ int main(int argc, char **argv) {
 		closedir(in_dir);
 		exit(EXIT_FAILURE);
 	}
+
+	if (strlen(argv[3]) > 1 || argv[3] - '0' > 8 || argv[3] - '0' < 1) {
+		fprintf(stderr, "Filtro no reconocido\n");
+		exit(EXIT_FAILURE);
+	}
 	//End error checking --------------------------------------------------
+	filt = argv[3] - '0';
 
 	MPI_Init(NULL, NULL);      // initialize MPI environment
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
@@ -78,7 +95,7 @@ int main(int argc, char **argv) {
 			// file = input location
 			// file + strlen(file) + 1 = output location
 			printf("%s\n", file + strlen(file) + 1);
-			process(file, file + strlen(file) + 1);
+			process(file, file + strlen(file) + 1, filt);
 			memset(file, 0, 256);
 		}
 	}
