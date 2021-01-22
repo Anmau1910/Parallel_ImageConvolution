@@ -55,10 +55,11 @@ float filters[9][3][3] = {
 };
 
 unsigned char kern_apply(unsigned char *col1, unsigned char *col2, unsigned char *col3, float kern[3][3]) {
-	unsigned char pix;
+	int pix;
 	pix = col1[0] * kern[0][0] + col1[1] * kern[0][1] + col1[2] * kern[0][2] +
 	      col2[0] * kern[1][0] + col2[1] * kern[1][1] + col2[2] * kern[1][2] +
 	      col3[0] * kern[2][0] + col3[1] * kern[2][1] + col3[2] * kern[2][2];
+	return pix < 0 ? 0 : (pix > 255 ? 255 : pix);
 }
 
 unsigned char apply(unsigned char *img, int w, int h, int i, float kern[3][3]) {
