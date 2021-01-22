@@ -78,10 +78,9 @@ void process(const char *filepath, const char *outfile) {
 		exit(EXIT_FAILURE);
 	}
 
-	printf("w: %d, h: %d, c: %d\n", w, h, chans);
-
 	out = malloc(w * h * sizeof(unsigned char));
 
+	#pragma omp parallel for
 	for(i = 0; i < w * h; i++) {
 		out[i] = apply(img, w, h, i, filters[OUTL]);
 	}
