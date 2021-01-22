@@ -1,14 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <dirent.h>
-#include <errno.h>
-#include <mpi.h>
-#include <string.h>
-
-#include "image_reader.c"
-
-void process(char *filename, char *output);
+#include "image_proc.h"
 
 int main(int argc, char **argv) {
 	DIR *in_dir, *out_dir;
@@ -36,7 +26,7 @@ int main(int argc, char **argv) {
 	}
 	//End error checking --------------------------------------------------
 
-	MPI_Init(&argc, &argv);      // initialize MPI environment
+	MPI_Init(NULL, NULL);      // initialize MPI environment
 	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_id);
 
@@ -50,7 +40,7 @@ int main(int argc, char **argv) {
 			if (de->d_type != DT_REG || !strstr(de->d_name, ".bmp")) 
 				continue;
 
-			process(de->d_name);
+			//process(de->d_name);
 
 			if( !(i % world_size) )
 				i++;
@@ -60,8 +50,10 @@ int main(int argc, char **argv) {
 			s = strlen(file);
 			file[s] = '/';
 			strcpy(file +s +1, de->d_name);
-			strcpy(file + strlen(file)+1, argv[2]);
-
+			strcpy(file + strlen(file) + 1, argv[2]);
+			s = strlen(file) + strlen(argv[2]);
+			file[s + 1] = '/';
+			strcpy(file + s + 2, de->d_name);
 
 			MPI_Send(file, 256, MPI_CHAR, i % world_size, tag, MPI_COMM_WORLD);
 
@@ -85,7 +77,7 @@ int main(int argc, char **argv) {
 
 			// file = input location
 			// file + strlen(file) + 1 = output location
-
+			printf("%s\n", file + strlen(file) + 1);
 			process(file, file + strlen(file) + 1);
 			memset(file, 0, 256);
 		}
