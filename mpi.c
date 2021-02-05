@@ -1,4 +1,5 @@
 #include "image_proc.h"
+#include <mpi.h>
 
 int main(int argc, char **argv) {
 	DIR *in_dir, *out_dir;
@@ -95,7 +96,6 @@ int main(int argc, char **argv) {
 
 			// file = input location
 			// file + strlen(file) + 1 = output location
-			// printf("%s\n", file + strlen(file) + 1);
 			process(file, file + strlen(file) + 1, filt);
 			memset(file, 0, 256);
 		}

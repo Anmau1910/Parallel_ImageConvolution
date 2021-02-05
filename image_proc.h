@@ -5,7 +5,6 @@
 #include <string.h>
 #include <dirent.h>
 #include <errno.h>
-#include <mpi.h>
 #include <string.h>
 
 extern float filters[9][3][3];
